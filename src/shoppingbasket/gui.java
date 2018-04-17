@@ -5,7 +5,6 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,6 +57,7 @@ public class gui extends javax.swing.JFrame {
    * Creates new form UI
    */
   public gui() {
+    System.out.println("Something happened");
     data = new shoppingbasket.DataInterface();
     data.readData();
     initComponents();
@@ -381,7 +381,9 @@ public class gui extends javax.swing.JFrame {
         Double.parseDouble(sPrice);
         double Price = Double.parseDouble(sPrice);
         if (Quantity > 0) {
-          shoppingCart.addShoppingItem(Name, Quantity, Price);
+          // TODO: set the ref to come from db or interface
+          OrderItem orderItem = new OrderItem(Name, Quantity, Price, "F001");
+          shoppingCart.addShoppingItem(orderItem);
           updateList(jList1);
         }
       } catch (NumberFormatException e) {
@@ -421,11 +423,11 @@ public class gui extends javax.swing.JFrame {
 
   private void SaveButtonActionPerformed(
       java.awt.event.ActionEvent event) {//GEN-FIRST:event_SaveButtonActionPerformed
-    try {
-      shoppingCart.file();
-    } catch (IOException ex) {
-      Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
-    }
+//    try {
+//      //shoppingCart.file();
+//    } catch (IOException ex) {
+//      Logger.getLogger(gui.class.getName()).log(Level.SEVERE, null, ex);
+//    }
   }
 
   public static void main(String args[]) {

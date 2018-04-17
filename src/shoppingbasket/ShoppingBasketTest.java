@@ -42,7 +42,7 @@ public class ShoppingBasketTest {
     @Test
     public void testitem1() {
         
-        shoppingCart.addShoppingItem(new OrderItem("test", 1, 2.777));
+        shoppingCart.addShoppingItem(new OrderItem("test", 1, 2.777, "F001"));
         int numberOfItems = shoppingCart.getShoppingItems().size();
 
         assertThat(numberOfItems, is(1));
@@ -52,8 +52,8 @@ public class ShoppingBasketTest {
     // testing item functionality
     @Test
     public void testitem2() {
-        shoppingCart.addShoppingItem(new OrderItem("test", 1, 2.76));
-        shoppingCart.addShoppingItem(new OrderItem("test2", 3, 5.09));
+        shoppingCart.addShoppingItem(new OrderItem("test", 1, 2.76, "F001"));
+        shoppingCart.addShoppingItem(new OrderItem("test2", 3, 5.09, "F001"));
         int numberOfItems = shoppingCart.getShoppingItems().size();
 
         assertThat(numberOfItems, is(2));
@@ -62,9 +62,9 @@ public class ShoppingBasketTest {
  // testing item functionality
     @Test
     public void testitem3() {
-        shoppingCart.addShoppingItem(new OrderItem("test", 1, 2.92));
-        shoppingCart.addShoppingItem(new OrderItem("test2", 3, 4.30));
-        shoppingCart.addShoppingItem(new OrderItem("test3", 3, 6.30));
+        shoppingCart.addShoppingItem(new OrderItem("test", 1, 2.92, "F001"));
+        shoppingCart.addShoppingItem(new OrderItem("test2", 3, 4.30, "F001"));
+        shoppingCart.addShoppingItem(new OrderItem("test3", 3, 6.30, "F001"));
         int numberOfItems = shoppingCart.getShoppingItems().size();
 
         assertThat(numberOfItems, is(2));
@@ -73,10 +73,10 @@ public class ShoppingBasketTest {
  // testing item functionality
     @Test
     public void testitem4() {
-        shoppingCart.addShoppingItem(new OrderItem("test", 1, 2.92));
-        shoppingCart.addShoppingItem(new OrderItem("test2", 3, 4.30));
-        shoppingCart.addShoppingItem(new OrderItem("test3", 3, 6.30));
-        shoppingCart.addShoppingItem(new OrderItem("test4", 3, 7.20));
+        shoppingCart.addShoppingItem(new OrderItem("test", 1, 2.92,"F001"));
+        shoppingCart.addShoppingItem(new OrderItem("test2", 3, 4.30, "F001"));
+        shoppingCart.addShoppingItem(new OrderItem("test3", 3, 6.30, "F001"));
+        shoppingCart.addShoppingItem(new OrderItem("test4", 3, 7.20, "F001"));
         int numberOfItems = shoppingCart.getShoppingItems().size();
 
         assertThat(numberOfItems, is(2));
@@ -85,11 +85,11 @@ public class ShoppingBasketTest {
  // testing item functionality
     @Test
     public void testitem5() {
-        shoppingCart.addShoppingItem(new OrderItem("test", 1, 2.92));
-        shoppingCart.addShoppingItem(new OrderItem("test2", 3, 4.30));
-        shoppingCart.addShoppingItem(new OrderItem("test3", 3, 6.30));
-        shoppingCart.addShoppingItem(new OrderItem("test4", 3, 7.20));
-        shoppingCart.addShoppingItem(new OrderItem("test5", 3, 9.20));
+        shoppingCart.addShoppingItem(new OrderItem("test", 1, 2.92, "F001"));
+        shoppingCart.addShoppingItem(new OrderItem("test2", 3, 4.30, "F001"));
+        shoppingCart.addShoppingItem(new OrderItem("test3", 3, 6.30, "F001"));
+        shoppingCart.addShoppingItem(new OrderItem("test4", 3, 7.20, "F001"));
+        shoppingCart.addShoppingItem(new OrderItem("test5", 3, 9.20, "F001"));
         int numberOfItems = shoppingCart.getShoppingItems().size();
 
         assertThat(numberOfItems, is(2));
@@ -98,8 +98,8 @@ public class ShoppingBasketTest {
     // Testing total functionality
     @Test
     public void testBillInCart() {
-        shoppingCart.addShoppingItem(new OrderItem("test", 1, 2.32));
-        shoppingCart.addShoppingItem(new OrderItem("test2", 3, 5.87));
+        shoppingCart.addShoppingItem(new OrderItem("test", 1, 2.32, "F001"));
+        shoppingCart.addShoppingItem(new OrderItem("test2", 3, 5.87, "F001"));
         int numberOfItems = shoppingCart.getShoppingItems().size();
         assertThat(numberOfItems, is(2));
         shoppingCart.calcBill();
@@ -111,10 +111,10 @@ public class ShoppingBasketTest {
     // testing clear functionality
     @Test
     public void testClear() {
-        shoppingCart.addShoppingItem(new OrderItem("test", 1, 2.32));
-        shoppingCart.addShoppingItem(new OrderItem("test2", 3, 5.65));
-        shoppingCart.addShoppingItem(new OrderItem("test3", 3, 5.82));        
-        shoppingCart.addShoppingItem(new OrderItem("test4", 3, 5.96));        
+        shoppingCart.addShoppingItem(new OrderItem("test", 1, 2.32, "F001"));
+        shoppingCart.addShoppingItem(new OrderItem("test2", 3, 5.65, "F001"));
+        shoppingCart.addShoppingItem(new OrderItem("test3", 3, 5.82, "F001"));
+        shoppingCart.addShoppingItem(new OrderItem("test4", 3, 5.96, "F001"));
         int numberOfItems = shoppingCart.getShoppingItems().size();
         assertThat(numberOfItems, is(4));
         shoppingCart.clear();
@@ -125,11 +125,10 @@ public class ShoppingBasketTest {
     @Test
     // testing file functionality
     public void testFile() {
-        shoppingCart.addShoppingItem(new OrderItem("test", 1, 2.32));
-        shoppingCart.addShoppingItem(new OrderItem("test2", 3, 5.65));
-        shoppingCart.addShoppingItem(new OrderItem("test3", 3, 5.82));        
-        shoppingCart.addShoppingItem(new OrderItem("test4", 3, 5.96));
-             
+        shoppingCart.addShoppingItem(new OrderItem("test", 1, 2.32, "F001"));
+        shoppingCart.addShoppingItem(new OrderItem("test2", 3, 5.65, "F001"));
+        shoppingCart.addShoppingItem(new OrderItem("test3", 3, 5.82, "F001"));
+        shoppingCart.addShoppingItem(new OrderItem("test4", 3, 5.96, "F001"));
         
     }
     

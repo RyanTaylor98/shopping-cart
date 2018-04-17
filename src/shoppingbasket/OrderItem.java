@@ -5,11 +5,13 @@ public class OrderItem {
     private String ProductName;
     private int quantity;
     private double LatestPrice;
+    private String ref;
 
-    public OrderItem(String name, int quantity, double price) {
+    public OrderItem(String name, int quantity, double price, String ref) {
         this.ProductName = name;
         this.quantity = quantity;
         this.LatestPrice = price;
+        this.ref = ref;
     }
 
     public String getProductName() {
@@ -36,4 +38,7 @@ public class OrderItem {
         this.LatestPrice = LatestPrice;
     }
 
+    public String getRef() {
+        return ref;
+    }
 }
