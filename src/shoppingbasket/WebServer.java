@@ -1,11 +1,10 @@
 package shoppingbasket;
 
-import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.Server;
+import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.handler.DefaultHandler;
 import org.mortbay.jetty.handler.HandlerList;
 import org.mortbay.jetty.handler.ResourceHandler;
-import shoppingbasket.handlers.Basket;
 
 public class WebServer
 {
@@ -22,14 +21,13 @@ public class WebServer
     resource_handler.setWelcomeFiles(new String[]{ "Login.html" });
     resource_handler.setResourceBase("./WebContent");
     String base = resource_handler.getResourceBase();
-    System.out.println(base);
 
     // Add the ResourceHandler to the server.
     HandlerList handlers = new HandlerList();
     handlers.setHandlers(new Handler[] { resource_handler, new DefaultHandler() });
     server.setHandler(handlers);
 
-    server.setHandler(new Basket());
+    //server.setHandler(new Basket());
 
     server.start();
     server.join();
