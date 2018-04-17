@@ -9,22 +9,22 @@ import org.mortbay.jetty.HttpConnection;
 import org.mortbay.jetty.Request;
 import org.mortbay.jetty.handler.AbstractHandler;
 
-public class Login extends AbstractHandler
+public class Basket extends AbstractHandler
 {
   final String greeting;
   final String body;
 
-  public Login()
+  public Basket()
   {
     this("Hello World");
   }
 
-  public Login( String greeting )
+  public Basket( String greeting )
   {
     this(greeting, null);
   }
 
-  public Login( String greeting, String body )
+  public Basket( String greeting, String body )
   {
     this.greeting = greeting;
     this.body = body;
