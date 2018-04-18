@@ -20,9 +20,11 @@ public class Checkout extends AbstractHandler
     response.setContentType("text/html; charset=utf-8");
     response.setStatus(HttpServletResponse.SC_OK);
 
+    String order = request.getHeader("order");
+    // TODO: write if statement to check order and input to database
+
     File initialFile = new File("WebContent/Checkout.html");
     InputStream htmlFile = new FileInputStream(initialFile);
-    response.setContentType("text/html");
     PrintWriter writer = response.getWriter();
     byte[] bytes=new byte[htmlFile.available()];
     htmlFile.read(bytes);

@@ -11,6 +11,7 @@ import org.mortbay.jetty.handler.AbstractHandler;
 
 public class Basket extends AbstractHandler
 {
+
   @Override
   public void handle( String target,
       HttpServletRequest request,
@@ -19,9 +20,11 @@ public class Basket extends AbstractHandler
     response.setContentType("text/html; charset=utf-8");
     response.setStatus(HttpServletResponse.SC_OK);
 
+    String id = request.getHeader("id");
+    // TODO: write if statement to get Data interface and check ID
+
     File initialFile = new File("WebContent/Basket.html");
     InputStream htmlFile = new FileInputStream(initialFile);
-    response.setContentType("text/html");
     PrintWriter writer = response.getWriter();
     byte[] bytes=new byte[htmlFile.available()];
     htmlFile.read(bytes);
