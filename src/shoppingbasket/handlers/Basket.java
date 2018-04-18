@@ -20,10 +20,17 @@ public class Basket extends AbstractHandler
     response.setContentType("text/html; charset=utf-8");
     response.setStatus(HttpServletResponse.SC_OK);
 
-    String id = request.getHeader("id");
-    // TODO: write if statement to get Data interface and check ID
+    String id = request.getHeader("id"); // Get ID from form on login page
+    // TODO: get Data interface and check ID
 
-    File initialFile = new File("WebContent/Basket.html");
+    File initialFile;
+    if (false) { // if id in database then show basket page
+      initialFile = new File("WebContent/Basket.html");
+    } else {
+      response.sendRedirect("/?login=fail");
+      return;
+    }
+
     InputStream htmlFile = new FileInputStream(initialFile);
     PrintWriter writer = response.getWriter();
     byte[] bytes=new byte[htmlFile.available()];

@@ -20,10 +20,19 @@ public class Checkout extends AbstractHandler
     response.setContentType("text/html; charset=utf-8");
     response.setStatus(HttpServletResponse.SC_OK);
 
-    String order = request.getHeader("order");
-    // TODO: write if statement to check order and input to database
+    String order = request.getHeader("order"); // Get order from from sent on /basket page
+    // TODO: write statement to insert order to database
+    String orderID = "Response from database";
 
-    File initialFile = new File("WebContent/Checkout.html");
+    File initialFile;
+    if (true) { // if order inserted to database and user id correct then
+      initialFile = new File("WebContent/Checkout.html");
+      response.encodeURL("/checkout?id="+orderID);
+    } else { // if
+      response.sendRedirect("/?order=fail");
+      return;
+    }
+
     InputStream htmlFile = new FileInputStream(initialFile);
     PrintWriter writer = response.getWriter();
     byte[] bytes=new byte[htmlFile.available()];
