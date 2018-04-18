@@ -9,8 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mortbay.jetty.handler.AbstractHandler;
 
-public class Basket extends AbstractHandler
+public class Checkout extends AbstractHandler
 {
+
   @Override
   public void handle( String target,
       HttpServletRequest request,
@@ -19,7 +20,7 @@ public class Basket extends AbstractHandler
     response.setContentType("text/html; charset=utf-8");
     response.setStatus(HttpServletResponse.SC_OK);
 
-    File initialFile = new File("WebContent/Basket.html");
+    File initialFile = new File("WebContent/Checkout.html");
     InputStream htmlFile = new FileInputStream(initialFile);
     response.setContentType("text/html");
     PrintWriter writer = response.getWriter();
