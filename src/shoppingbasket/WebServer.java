@@ -1,33 +1,38 @@
 package shoppingbasket;
 
-import org.mortbay.jetty.Server;
 import org.mortbay.jetty.Handler;
-import org.mortbay.jetty.handler.DefaultHandler;
-import org.mortbay.jetty.handler.HandlerList;
+import org.mortbay.jetty.Server;
+import org.mortbay.jetty.handler.ContextHandler;
+import org.mortbay.jetty.handler.ContextHandlerCollection;
 import org.mortbay.jetty.handler.ResourceHandler;
+import shoppingbasket.handlers.Basket;
+import shoppingbasket.handlers.Checkout;
 
 public class WebServer
 {
   public static void main( String[] args ) throws Exception
   {
     Server server = new Server(8080);
-    // Create the ResourceHandler. It is the object that will actually handle the request for a given file. It is
-    // a Jetty Handler object so it is suitable for chaining with other handlers as you will see in other examples.
-    ResourceHandler resource_handler = new ResourceHandler();
 
-    // Configure the ResourceHandler. Setting the resource base indicates where the files should be served out of.
-    // In this example it is the current directory but it can be configured to anything that the jvm has access to.
-    //resource_handler.setDirectoriesListed(true);
+    // Add index Handler
+    ResourceHandler resource_handler = new ResourceHandler();
     resource_handler.setWelcomeFiles(new String[]{ "Login.html" });
     resource_handler.setResourceBase("./WebContent");
-    String base = resource_handler.getResourceBase();
+    ContextHandler context = new ContextHandler("/");
+    context.setHandler(resource_handler);
 
-    // Add the ResourceHandler to the server.
-    HandlerList handlers = new HandlerList();
-    handlers.setHandlers(new Handler[] { resource_handler, new DefaultHandler() });
-    server.setHandler(handlers);
+    // Basket Handler in Class
+    ContextHandler basket = new ContextHandler("/basket");
+    basket.setHandler(new Basket());
 
-    //server.setHandler(new Basket());
+    // Checkout Handler in Class
+    ContextHandler checkout = new ContextHandler("/checkout");
+    checkout.setHandler(new Checkout());
+
+    // Set all contexts on Server
+    ContextHandlerCollection contexts = new ContextHandlerCollection();
+    contexts.setHandlers(new Handler[] { context, basket, checkout });
+    server.setHandler(contexts);
 
     server.start();
     server.join();
