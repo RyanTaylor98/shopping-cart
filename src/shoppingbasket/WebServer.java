@@ -6,6 +6,7 @@ import org.mortbay.jetty.handler.ContextHandler;
 import org.mortbay.jetty.handler.ContextHandlerCollection;
 import org.mortbay.jetty.handler.ResourceHandler;
 import shoppingbasket.handlers.Basket;
+import shoppingbasket.handlers.Books;
 import shoppingbasket.handlers.Checkout;
 
 public class WebServer
@@ -29,9 +30,13 @@ public class WebServer
     ContextHandler checkout = new ContextHandler("/checkout");
     checkout.setHandler(new Checkout());
 
+    // Book List
+    ContextHandler books = new ContextHandler("/api/books");
+    books.setHandler(new Books());
+
     // Set all contexts on Server
     ContextHandlerCollection contexts = new ContextHandlerCollection();
-    contexts.setHandlers(new Handler[] { context, basket, checkout });
+    contexts.setHandlers(new Handler[] { context, basket, checkout, books });
     server.setHandler(contexts);
 
     server.start();
