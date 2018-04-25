@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mortbay.jetty.handler.AbstractHandler;
 
-public class Basket extends AbstractHandler
+public class Books extends AbstractHandler
 {
 
   @Override
@@ -17,26 +17,16 @@ public class Basket extends AbstractHandler
       HttpServletRequest request,
       HttpServletResponse response, int i ) throws IOException
   {
-    response.setContentType("text/html; charset=utf-8");
+    response.setContentType("text/json; charset=utf-8");
     response.setStatus(HttpServletResponse.SC_OK);
 
-    String id = request.getHeader("memberid"); // Get ID from form on login page
-    // TODO: get Data interface and check ID
-    System.out.println(id);
-    File initialFile;
-    if (id == "1154") { // if id in database then show basket page
-      System.out.println("Success");
-      initialFile = new File("WebContent/Basket.html");
-    } else {
-      System.out.println("Failure");
-      response.sendRedirect("/?login=fail");
-      return;
-    }
+    // TODO: get json of books from database
+    File initialFile = new File("WebContent/books.json");
 
-    InputStream htmlFile = new FileInputStream(initialFile);
+    InputStream jsonFile = new FileInputStream(initialFile);
     PrintWriter writer = response.getWriter();
-    byte[] bytes=new byte[htmlFile.available()];
-    htmlFile.read(bytes);
+    byte[] bytes=new byte[jsonFile.available()];
+    jsonFile.read(bytes);
     response.setContentLength(bytes.length);
     writer.print(new String(bytes));
     writer.flush();
