@@ -49,19 +49,15 @@ public class gui extends javax.swing.JFrame {
   private JTextField priceField;
   private JSpinner quantityField;
 
-  shoppingbasket.DataInterface data;
-
   public ShoppingBasket shoppingCart;
 
   /**
    * Creates new form UI
    */
   public gui() {
-    System.out.println("Something happened");
-    data = new shoppingbasket.DataInterface();
-    data.readData();
-    initComponents();
     shoppingCart = new ShoppingBasket();
+    Boolean valid = shoppingCart.ValidateMember("1154");
+    initComponents();
   }
 
 
@@ -411,7 +407,7 @@ public class gui extends javax.swing.JFrame {
   // clear button performer
   private void clearButtonActionPerformed(
       java.awt.event.ActionEvent event) {//GEN-FIRST:event_clearButtonActionPerformed
-    shoppingCart.clear();
+    //shoppingCart.clear();
     updateList(jList1);
   }
 

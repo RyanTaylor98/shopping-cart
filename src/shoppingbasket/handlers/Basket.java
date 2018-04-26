@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mortbay.jetty.handler.AbstractHandler;
 
+import shoppingbasket.ShoppingBasket;
+
 public class Basket extends AbstractHandler
 {
 
@@ -20,11 +22,10 @@ public class Basket extends AbstractHandler
     response.setContentType("text/html; charset=utf-8");
     response.setStatus(HttpServletResponse.SC_OK);
 
-    String id = request.getHeader("memberid"); // Get ID from form on login page
-    // TODO: get Data interface and check ID
-    System.out.println(id);
+    String id = request.getParameter("memberid"); // Get ID from form on login page
+    boolean id_valid = ShoppingBasket.ValidateMember(id);
     File initialFile;
-    if (id == "1154") { // if id in database then show basket page
+    if (id_valid) { // if id in database then show basket page
       System.out.println("Success");
       initialFile = new File("WebContent/Basket.html");
     } else {

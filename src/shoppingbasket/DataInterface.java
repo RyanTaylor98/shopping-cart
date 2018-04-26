@@ -1,23 +1,50 @@
 package shoppingbasket;
 
-import java.sql.*;  
+import java.io.InputStream;
+import java.sql.*;
 
 public class DataInterface {
-	public void readData(){  
+	public static boolean validateMembers(String query){
 		try{  
-		Class.forName("com.mysql.jdbc.Driver");  
-		Connection con=DriverManager.getConnection(  
-		"jdbc:mysql://localhost:3306/shoppingcart","ryan","test");
-		//here sonoo is database name, root is username and password  
-		Statement stmt=con.createStatement();  
-		ResultSet rs=stmt.executeQuery("select * from Books");
-		while(rs.next())  
-		System.out.println(rs.getString(1)+"  "+rs.getString(2)+"  "+rs.getString(3)+"  "+rs.getString(4));  
-		con.close();  
-		}catch(Exception e){ System.out.println(e);}  
-	}  
-	//TODO: connect to database
-	//TODO: read from database
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con=DriverManager.getConnection(
+			"jdbc:mysql://localhost:3306/shoppingcart","ryan","test");
+			//here sonoo is database name, root is username and password
+			Statement stmt=con.createStatement();
+			ResultSet rs=stmt.executeQuery(query);
+			if (!rs.next() ) {
+					System.out.println("No member in database");
+					return false;
+			}
+			con.close();
+			return true;
+		}catch(Exception e){
+			System.out.println(e);
+			return false;
+		}
+	}
+
+	public static InputStream getBooks(String query) {
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con=DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/shoppingcart","ryan","test");
+			//here sonoo is database name, root is username and password
+			Statement stmt=con.createStatement();
+			ResultSet rs=stmt.executeQuery(query);
+			// TODO: convert mysql to input stream
+			if (!rs.next() ) {
+				System.out.println("No books in database");
+				return null;
+			}
+			con.close();
+			return null;
+		}catch(Exception e){
+			System.out.println(e);
+			return null;
+		}
+	}
+
 	//TODO: write to database
 
 }

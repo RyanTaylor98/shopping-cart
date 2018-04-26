@@ -1,5 +1,6 @@
 package shoppingbasket;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -25,6 +26,11 @@ public class ShoppingBasket {
         return BillTotal;
     }
     
+    public static boolean ValidateMember(String id) {
+    	boolean id_check = DataInterface.validateMembers("select * from Members where Member_id="+id);
+    	return id_check;
+    }
+    
    // adds up the total method
     public void calcBill() {
         this.BillTotal = 0;
@@ -33,11 +39,6 @@ public class ShoppingBasket {
         });
     }
 
-    // Clear basket from array
-    public void clear() {
-        this.shoppingItems.removeAll(this.shoppingItems);
-    }
-    
     public void checkout() {
     	try {
     		Class.forName("com.mysql.jdbc.Driver");  
@@ -57,4 +58,9 @@ public class ShoppingBasket {
         System.out.println(e);
       }
     }
+
+  public static InputStream GetBooks() {
+    InputStream jsonData = DataInterface.getBooks("select * from Books;");
+    return jsonData;
+  }
 }
