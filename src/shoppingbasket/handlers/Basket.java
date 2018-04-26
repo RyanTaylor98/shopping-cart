@@ -23,10 +23,9 @@ public class Basket extends AbstractHandler
     response.setStatus(HttpServletResponse.SC_OK);
 
     String id = request.getParameter("memberid"); // Get ID from form on login page
-    // TODO: get Data interface and check ID
-    ShoppingBasket.ValidateMember(id);
+    boolean id_valid = ShoppingBasket.ValidateMember(id);
     File initialFile;
-    if (id.equals("1154")) { // if id in database then show basket page
+    if (id_valid) { // if id in database then show basket page
       System.out.println("Success");
       initialFile = new File("WebContent/Basket.html");
     } else {

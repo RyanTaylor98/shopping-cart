@@ -11,17 +11,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
 	<style>
 	body {
 		padding-top: 50px;
 		padding-bottom: 20px;
 	}
 </style>
-<link rel="stylesheet" href="css/bootstrap-theme.min.css">
-<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="/css/main.css">
 
-<script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+<script src="/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
 </head>
 <body>
         <!--[if lt IE 8]>
@@ -48,52 +48,110 @@
           <div class="container">
           	<!-- Example row of columns -->
           	<p></p>
+						<form method="post" action="/checkout/">
           	<div class="row">
           		<div class="col-md-12">
-          			<form method="post">
-          				<select name="book">
-          					<option value="AB123">A Tale of Two Cities</option>
-          					<option value="CD456">Some Other Book</option>
-          				</select>
+								<table id="myTable" class=" table order-list">
+									<thead>
+									<tr>
+										<td>Name</td>
+										<td>Format</td>
+										<td>Quantity</td>
+									</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td class="col-sm-4">
+											<select name="name_1" class="form-control"></select>
+										</td>
+										<td class="col-sm-4">
+											<select name="format_1"  class="form-control"></select>
+										</td>
+										<td class="col-sm-3">
+											<input type="number" name="quantity_1"  class="form-control"/>
+										</td>
+										<td class="col-sm-2"><a class="deleteRow"></a>
 
-
-          				<input type="text" name="memberid" value="" size="60" maxlength="60" >
-
-
-          				<input name="blah" value="3374b1dd84" type="checkbox">
-          				<label> EPUB </label>
-          				<input name="blah" value="6374b1dd84" type="checkbox">
-          				<label> MOBI </label>
-          				<input name="blah" value="5374b1dd84" type="checkbox">
-          				<label> AZF </label>		
-
-          				<input type="submit" id="edit-submit" name="op" value="Add to basket">
-
-          			</form>
+										</td>
+									</tr>
+									</tbody>
+									<tfoot>
+									<tr>
+										<td colspan="5" style="text-align: left;">
+											<input type="button" class="btn btn-lg btn-block " id="addrow" value="Add Row" />
+										</td>
+									</tr>
+									<tr>
+									</tr>
+									</tfoot>
+								</table>
           		</div>
           	</div>
+
           	<div class="row">
           		<div class="col-md-12">
-          			List of Order Items
+								<input type="submit" id="edit-submit" value="Checkout">
           		</div>
           	</div>
-
-          	<div class="row">
-          		<div class="col-md-12">
-          			Checkout Button
-          		</div>
-          	</div>
-
+						</form>
           	<hr>
 
           	<footer>
           	</footer>
           </div> <!-- /container -->        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-          <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+          <script>window.jQuery || document.write('<script src="/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
 
-          <script src="js/vendor/bootstrap.min.js"></script>
+          <script src="/js/vendor/bootstrap.min.js"></script>
+			  	<script src="/js/vendor/mindmup-editabletable.js"></script>
+					<script src="/js/vendor/numeric-input-example.js"></script>
+          <script src="/js/main.js"></script>
 
-          <script src="js/main.js"></script>
+				  <script>
+						$(document).ready(function () {
+							$.getJSON( "/api/books/", function( data ) {
+								console.log(data);
+							});
+							var counter = 0;
+
+							$("#addrow").on("click", function () {
+									var newRow = $("<tr>");
+									var cols = "";
+
+									cols += '<td><select name="name_'+counter+'" class="form-control"></select></td>';
+									cols += '<td><select name="format_'+counter+'"  class="form-control"></select></td>';
+									cols += '<td><input type="number" class="form-control" name="quantity_'+ counter +'"/></td>';
+
+									cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
+									newRow.append(cols);
+									$("table.order-list").append(newRow);
+									counter++;
+							});
+
+
+
+							$("table.order-list").on("click", ".ibtnDel", function (event) {
+									$(this).closest("tr").remove();
+									counter -= 1
+							});
+
+
+					});
+
+
+
+					function calculateRow(row) {
+							var price = +row.find('input[name^="price"]').val();
+
+					}
+
+					function calculateGrandTotal() {
+							var grandTotal = 0;
+							$("table.order-list").find('input[name^="price"]').each(function () {
+									grandTotal += +$(this).val();
+							});
+							$("#grandtotal").text(grandTotal.toFixed(2));
+					}
+					</script>
 
           <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
           <script>

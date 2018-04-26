@@ -1,5 +1,6 @@
 package shoppingbasket;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -26,9 +27,8 @@ public class ShoppingBasket {
     }
     
     public static boolean ValidateMember(String id) {
-    	DataInterface.readMembers("select * from members where Member_id=1154");
-		return false;
-    
+    	boolean id_check = DataInterface.validateMembers("select * from Members where Member_id="+id);
+    	return id_check;
     }
     
    // adds up the total method
@@ -58,4 +58,9 @@ public class ShoppingBasket {
         System.out.println(e);
       }
     }
+
+  public static InputStream GetBooks() {
+    InputStream jsonData = DataInterface.getBooks("select * from Books;");
+    return jsonData;
+  }
 }

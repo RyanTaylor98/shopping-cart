@@ -117,7 +117,7 @@ public class ShoppingBasketTest {
         shoppingCart.addShoppingItem(new OrderItem("test4", 3, 5.96, "F001"));
         int numberOfItems = shoppingCart.getShoppingItems().size();
         assertThat(numberOfItems, is(4));
-        shoppingCart.clear();
+        //shoppingCart.clear();
         numberOfItems = shoppingCart.getShoppingItems().size();
         assertThat(numberOfItems, is(0));
     }

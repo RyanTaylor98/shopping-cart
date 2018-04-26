@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mortbay.jetty.handler.AbstractHandler;
+import shoppingbasket.ShoppingBasket;
 
 public class Books extends AbstractHandler
 {
@@ -24,6 +25,7 @@ public class Books extends AbstractHandler
     File initialFile = new File("WebContent/books.json");
 
     InputStream jsonFile = new FileInputStream(initialFile);
+    InputStream jsonDB = ShoppingBasket.GetBooks();
     PrintWriter writer = response.getWriter();
     byte[] bytes=new byte[jsonFile.available()];
     jsonFile.read(bytes);
