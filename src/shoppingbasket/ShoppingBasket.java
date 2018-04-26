@@ -25,6 +25,12 @@ public class ShoppingBasket {
         return BillTotal;
     }
     
+    public static boolean ValidateMember(String id) {
+    	DataInterface.readMembers("select * from members where Member_id=1154");
+		return false;
+    
+    }
+    
    // adds up the total method
     public void calcBill() {
         this.BillTotal = 0;
@@ -33,11 +39,6 @@ public class ShoppingBasket {
         });
     }
 
-    // Clear basket from array
-    public void clear() {
-        this.shoppingItems.removeAll(this.shoppingItems);
-    }
-    
     public void checkout() {
     	try {
     		Class.forName("com.mysql.jdbc.Driver");  
