@@ -1,10 +1,11 @@
 package shoppingbasket.handlers;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mortbay.jetty.handler.AbstractHandler;
@@ -21,11 +22,10 @@ public class Books extends AbstractHandler
     response.setContentType("text/json; charset=utf-8");
     response.setStatus(HttpServletResponse.SC_OK);
 
-    // TODO: get json of books from database
     File initialFile = new File("WebContent/books.json");
 
-    InputStream jsonFile = new FileInputStream(initialFile);
-    InputStream jsonDB = ShoppingBasket.GetBooks();
+    String books = ShoppingBasket.GetBooks("books");
+    InputStream jsonFile = new ByteArrayInputStream(books.getBytes(StandardCharsets.UTF_8));
     PrintWriter writer = response.getWriter();
     byte[] bytes=new byte[jsonFile.available()];
     jsonFile.read(bytes);

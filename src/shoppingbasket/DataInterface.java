@@ -1,7 +1,9 @@
 package shoppingbasket;
 
-import java.io.InputStream;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class DataInterface {
 	public static boolean validateMembers(String query){
@@ -24,7 +26,7 @@ public class DataInterface {
 		}
 	}
 
-	public static InputStream getBooks(String query) {
+	public static ResultSet getBooks(String query) {
 		try{
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con=DriverManager.getConnection(
@@ -32,13 +34,7 @@ public class DataInterface {
 			//here sonoo is database name, root is username and password
 			Statement stmt=con.createStatement();
 			ResultSet rs=stmt.executeQuery(query);
-			// TODO: convert mysql to input stream
-			if (!rs.next() ) {
-				System.out.println("No books in database");
-				return null;
-			}
-			con.close();
-			return null;
+			return rs;
 		}catch(Exception e){
 			System.out.println(e);
 			return null;
