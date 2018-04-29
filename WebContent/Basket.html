@@ -48,7 +48,7 @@
           <div class="container">
           	<!-- Example row of columns -->
           	<p></p>
-						<form method="post" action="/checkout/">
+						<form method="post" action="/api/order">
           	<div class="row">
           		<div class="col-md-12">
 								<table id="myTable" class="table order-list">
@@ -62,10 +62,10 @@
 									<tbody>
 									<tr>
 										<td class="col-sm-4">
-											<select name="name_1" class="form-control"></select>
+											<select name="name_1" class=""></select>
 										</td>
 										<td class="col-sm-4">
-											<select name="format_1" class="form-control"></select>
+											<select name="format_1" class="selectpicker" multiple></select>
 										</td>
 										<td class="col-sm-2 text-right" id="price_1">
 											£0.00
@@ -89,8 +89,13 @@
           	</div>
 
           	<div class="row">
-          		<div class="col-md-12">
-								<input type="submit" id="edit-submit" value="Checkout">
+							<div class="col-sm-8">
+							</div>
+							<div class="col-sm-2" id="total">
+								£0.00
+							</div>
+          		<div class="col-sm-2">
+								<input type="submit" id="edit-submit" value="Checkout" class="btn-success btn-lg">
           		</div>
           	</div>
 						</form>
@@ -104,41 +109,33 @@
           <script src="/js/vendor/bootstrap.min.js"></script>
 			  	<script src="/js/vendor/mindmup-editabletable.js"></script>
 					<script src="/js/vendor/numeric-input-example.js"></script>
+				  <script src="/js/vendor/bootstrap-select.js"></script>
           <script src="/js/main.js"></script>
 
 				  <script>
-				  	var books, options_books = "", options_formats_default = "", basket = [];
+				  	var books, options_books = "", options_formats_default = "";
 				    $(document).ready(function () {
 							getBooks();
 
 							$('.container').on('change', 'select[name^="name"]', function (e) {
-									if (checkBookUnique(e.target.value)) {
-										console.log(e.target.value + " in " +basket);
-										setBookPrice(e.target.name);
-										// If unique in basket then set its price
-									}
 									generateBasket();
-									setBookFormat(e.target.name);
 								});
 
-							var counter = 0;
+							var counter = 2;
 
 							$("#addrow").on("click", function () {
 									var newRow = $("<tr>");
 									var cols = "";
-
+									console.log("counter = "+counter);
 									cols += '<td><select name="name_'+counter+'" class="form-control">'+options_books+'</select></td>';
-									cols += '<td><select name="format_'+counter+'"  class="form-control">'+options_formats_default+'</select></td>';
-									cols += '<td class="text-right"><input type="hidden" class="form-control" name="price_'+ counter +'" value="'+0.00+'"/>£0.00</td>';
+									cols += '<td><select name="format_'+counter+'"  class="selectpicker" multiple>'+options_formats_default+'</select></td>';
+									cols += '<td class="text-right" id="price_'+counter+'">£0.00</td>';
 
 									cols += '<td class="text-right"><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
 									newRow.append(cols);
 									$("table.order-list").append(newRow);
 
 									generateBasket();
-									if (checkBookUnique(["name_"+counter, books[0].Book_ref])) {
-										setBookPrice("name_"+counter);
-									}
 									counter++;
 							});
 
@@ -146,26 +143,12 @@
 
 							$("table.order-list").on("click", ".ibtnDel", function (event) {
 									$(this).closest("tr").remove();
+									generateBasket();
 									counter -= 1
 							});
 
 
 					});
-
-
-
-					function calculateRow(row) {
-							var price = +row.find('input[name^="price"]').val();
-
-					}
-
-					function calculateGrandTotal() {
-							var grandTotal = 0;
-							$("table.order-list").find('input[name^="price"]').each(function () {
-									grandTotal += +$(this).val();
-							});
-							$("#grandtotal").text(grandTotal.toFixed(2));
-					}
 
 					function getBooks() {
 						$.getJSON( "/api/books/", function( data ) {
@@ -179,20 +162,18 @@
 										options_formats_default += '<option value="'+formats[i]+'">'+formats[i]+'</option>';
 									}
 									//Set the first line correctly
-									$('[name="name_1"]').empty().append(options_books);
-									setBookPrice("name_1");
-									setBookFormat("name_1");
+									$('[name="name_1"]').empty().append(options_books)
+									$('[name="format_1"]').empty().append(options_formats_default);
+									$('[id="price_1"]').empty().append("£"+books[0].Book_price);
 								}).fail(function (jqxhr, status, error) {
 									console.log('error', status, error)
 								});
 					}
 
 					function setBookPrice(name) {
-
 							var rowNumber = name.split('_')[1];
 							var bookID = $('[name="'+name+'"] option:selected').attr("value");
 							var book = findBook(bookID);
-							console.log(book);
 							$('[id="price_'+rowNumber+'"]').empty().append("£"+book.Book_price);
 					}
 
@@ -208,13 +189,6 @@
 							$('[name="format_'+rowNumber+'"]').empty().append(options_formats);
 					}
 
-					function checkBookUnique(bookID) {
-							if (basket.indexOf(bookID) > -1) {
-							  return false;
-							}
-							return true;
-					}
-
 					function findBook(id) {
 						// iterate over each element in the array
 						for (var i = 0; i < books.length; i++) {
@@ -226,11 +200,45 @@
 					}
 
 					function generateBasket() {
+						// get all the current elements
 						var elems = $('[name^="name"]');
-						basket = [];
+
+						var IDlist = [];
+						// set the price and format on all items
 						for (var i = 0; i<elems.length; i++) {
-							basket.push(elems[i].value);
+							IDlist.push(elems[i].value);
+							setBookPrice(elems[i].name);
+							setBookFormat(elems[i].name);
 						}
+
+						var sorted_arr = IDlist.slice().sort();
+						var results = [];
+						for (var i = 0; i < sorted_arr.length - 1; i++) {
+								if (sorted_arr[i + 1].name == sorted_arr[i].name) {
+										results.push(sorted_arr[i]);
+								}
+						}
+						console.log(results);
+
+						<!--// Set the price to 0.00 on all duplicated items-->
+						<!--for (var i = 0; i<elems.length; i++) {-->
+							<!--var i = 1;-->
+							<!--while (i<elems.length) {-->
+										<!--if (i === -1) {-->
+											<!--return 1;-->
+										<!--}-->
+										<!--i = basket.indexOf(bookID,i);-->
+										<!--count += 1;-->
+							<!--}-->
+						<!--}-->
+
+						// set the total on the page
+						elems = $('[id^="price"]');
+						var total = 0;
+						for (var i = 0; i<elems.length; i++) {
+							total += parseFloat(elems[i].innerHTML.split("£")[1]);
+						}
+						$('#total').empty().append("£"+total.toString());
 					}
 					</script>
 

@@ -49,8 +49,8 @@
             <!-- Example row of columns -->
             <p></p>
             <div class="row">
-              <div class="col-md-12">
-                Your Order Reference is: 
+              <div class="col-md-12" id="orderID">
+                Your Order does not seem to have worked, please try again.
               </div>
             </div>
           </div>
@@ -65,6 +65,28 @@
         <script src="/js/vendor/bootstrap.min.js"></script>
 
         <script src="/js/main.js"></script>
+
+        <script>
+          $(document).ready(function () {
+            var id = getUrlParameter("id");
+            $('#orderID').empty().append("Order complete, your order ID is "+id);
+          });
+
+          function getUrlParameter(sParam) {
+              var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                  sURLVariables = sPageURL.split('&'),
+                  sParameterName,
+                  i;
+
+              for (i = 0; i < sURLVariables.length; i++) {
+                  sParameterName = sURLVariables[i].split('=');
+
+                  if (sParameterName[0] === sParam) {
+                      return sParameterName[1] === undefined ? true : sParameterName[1];
+                  }
+              }
+          }
+        </script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>

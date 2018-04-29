@@ -92,4 +92,9 @@ public class ShoppingBasket {
 
       return "{}";
   }
+
+  public static String placeOrder() {
+      DataInterface.finaliseOrder("");
+      return "the database said something";
+  }
 }
