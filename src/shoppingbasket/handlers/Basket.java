@@ -26,10 +26,8 @@ public class Basket extends AbstractHandler
     boolean id_valid = ShoppingBasket.ValidateMember(id);
     File initialFile;
     if (id_valid) { // if id in database then show basket page
-      System.out.println("Success");
       initialFile = new File("WebContent/Basket.html");
     } else {
-      System.out.println("Failure");
       response.sendRedirect("/?login=fail");
       return;
     }

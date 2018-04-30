@@ -1,12 +1,17 @@
 package shoppingbasket;
 
-import java.io.InputStream;
+import com.google.gson.Gson;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 
 public class ShoppingBasket {
@@ -59,8 +64,41 @@ public class ShoppingBasket {
       }
     }
 
-  public static InputStream GetBooks() {
-    InputStream jsonData = DataInterface.getBooks("select * from Books;");
-    return jsonData;
+  public static String GetBooks(String keyName) {
+      ResultSet rs = DataInterface.getBooks("select * from Books;");
+      Map json = new HashMap();
+      List list = new ArrayList();
+      if(rs!=null)
+      {
+        try {
+          ResultSetMetaData metaData = rs.getMetaData();
+          while(rs.next())
+          {
+            Map<String,Object> columnMap = new HashMap<String, Object>();
+            for(int columnIndex=1;columnIndex<=metaData.getColumnCount();columnIndex++)
+            {
+              if(rs.getString(metaData.getColumnName(columnIndex))!=null)
+                columnMap.put(metaData.getColumnLabel(columnIndex), rs.getString(metaData.getColumnName(columnIndex)));
+              else
+                columnMap.put(metaData.getColumnLabel(columnIndex), "");
+            }
+            list.add(columnMap);
+          }
+          return new Gson().toJson(list);
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+        json.put(keyName, list);
+      }
+
+      return "{}";
+  }
+
+  public static String placeOrder(ArrayList<String> order) {
+      // TODO: check order and finalise
+      DataInterface.checkOrder("");
+      UUID uuid = UUID.randomUUID();
+      DataInterface.finaliseOrder("");
+      return uuid.toString();
   }
 }
