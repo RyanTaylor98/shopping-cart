@@ -1,6 +1,7 @@
 package shoppingbasket.handlers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,17 +20,18 @@ public class Order extends AbstractHandler
     response.setStatus(HttpServletResponse.SC_OK);
 
     Enumeration<String> params = request.getParameterNames();
+    ArrayList<String> order = new ArrayList<>();
     while(params.hasMoreElements()){
       String paramName = params.nextElement();
       System.out.println("Parameter Name - "+paramName+", Value - "+request.getParameter(paramName));
-      // First check if name
+      // TODO: First check for name_integer and add to order array
 
-      // Second check if it is format
+      // TODO: Second check for matching format_integer
 
-      // Calculate the total order
+      // TODO: Add to order array
     }
 
-    String orderID = ShoppingBasket.placeOrder();
+    String orderID = ShoppingBasket.placeOrder(order);
 
     response.sendRedirect("/checkout?id="+orderID);
   }

@@ -87,7 +87,6 @@ public class gui extends javax.swing.JFrame {
 
     GroupLayout jFrame1Layout = new GroupLayout(jFrame1.getContentPane());
     jFrame1.getContentPane().setLayout(jFrame1Layout);
-    //TODO: pull products from datbase
     jFrame1Layout.setHorizontalGroup(
         jFrame1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 400, Short.MAX_VALUE)

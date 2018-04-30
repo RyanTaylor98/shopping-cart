@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 public class DataInterface {
 
-	private static String connectionString = "jdbc:mysql://localhost:3306/shoppingcart"
+	private static String connectionString = "jdbc:mysql://localhost:3306/shoppingcart";
 	private static String dbUser = "ryan";
 	private static String dbPassword = "test";
 	private static String dbString = "com.mysql.jdbc.Driver";
@@ -21,7 +21,6 @@ public class DataInterface {
 			Statement stmt=con.createStatement();
 			ResultSet rs=stmt.executeQuery(query);
 			if (!rs.next() ) {
-					System.out.println("No member in database");
 					return false;
 			}
 			con.close();

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 public class ShoppingBasket {
@@ -93,8 +94,11 @@ public class ShoppingBasket {
       return "{}";
   }
 
-  public static String placeOrder() {
+  public static String placeOrder(ArrayList<String> order) {
+      // TODO: check order and finalise
+      DataInterface.checkOrder("");
+      UUID uuid = UUID.randomUUID();
       DataInterface.finaliseOrder("");
-      return "the database said something";
+      return uuid.toString();
   }
 }

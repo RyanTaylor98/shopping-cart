@@ -12,6 +12,7 @@
 	<link rel="apple-touch-icon" href="apple-touch-icon.png">
 
 	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/bootstrap-select.min.css">
 	<style>
 	body {
 		padding-top: 50px;
@@ -62,10 +63,10 @@
 									<tbody>
 									<tr>
 										<td class="col-sm-4">
-											<select name="name_1" class=""></select>
+											<select name="name_1" class="form-control selectpicker"></select>
 										</td>
 										<td class="col-sm-4">
-											<select name="format_1" class="selectpicker" multiple></select>
+											<select name="format_1" class="form-control selectpicker" multiple required></select>
 										</td>
 										<td class="col-sm-2 text-right" id="price_1">
 											£0.00
@@ -89,7 +90,8 @@
           	</div>
 
           	<div class="row">
-							<div class="col-sm-8">
+							<div class="col-sm-8 text-right">
+								<p class="font-weight-bold">Total:</p>
 							</div>
 							<div class="col-sm-2" id="total">
 								£0.00
@@ -113,29 +115,58 @@
           <script src="/js/main.js"></script>
 
 				  <script>
-				  	var books, options_books = "", options_formats_default = "";
+				  	var books, options_books = "";
 				    $(document).ready(function () {
-							getBooks();
 
+				    	// Get Books from API
+							getBooks(function () {
+								// Set First Line Correctly
+								$('[name="name_1"]').empty().append(options_books);
+								setBookFormat("name_1");
+								setBookPrice("name_1");
+								cleanBookSelections();
+								$('.selectpicker').selectpicker('refresh');
+								setTotal();
+							});
+
+							// Set Event on all changes to book selection
 							$('.container').on('change', 'select[name^="name"]', function (e) {
-									generateBasket();
+									getBooks(function () {
+										// Set Line Correctly
+										setBookFormat(e.target.name);
+										setBookPrice(e.target.name);
+										cleanBookSelections();
+										$('.selectpicker').selectpicker('refresh');
+										setTotal();
+									});
 								});
 
 							var counter = 2;
 
 							$("#addrow").on("click", function () {
+									if (counter > books.length) {
+										return;
+									}
 									var newRow = $("<tr>");
 									var cols = "";
-									console.log("counter = "+counter);
-									cols += '<td><select name="name_'+counter+'" class="form-control">'+options_books+'</select></td>';
-									cols += '<td><select name="format_'+counter+'"  class="selectpicker" multiple>'+options_formats_default+'</select></td>';
+									cols += '<td><select name="name_'+counter+'" class="form-control selectpicker">'+options_books+'</select></td>';
+									cols += '<td><select name="format_'+counter+'"  class="form-control selectpicker" multiple required></select></td>';
 									cols += '<td class="text-right" id="price_'+counter+'">£0.00</td>';
 
 									cols += '<td class="text-right"><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
 									newRow.append(cols);
 									$("table.order-list").append(newRow);
 
-									generateBasket();
+									setBookFormat("name_"+counter);
+									setBookPrice("name_"+counter);
+									$('.selectpicker').selectpicker('refresh');
+									setTotal();
+
+									getBooks(function () {
+										cleanBookSelections();
+										$('.selectpicker').selectpicker('refresh');
+									});
+
 									counter++;
 							});
 
@@ -143,28 +174,20 @@
 
 							$("table.order-list").on("click", ".ibtnDel", function (event) {
 									$(this).closest("tr").remove();
-									generateBasket();
 									counter -= 1
 							});
 
 
 					});
 
-					function getBooks() {
+					function getBooks(callback) {
 						$.getJSON( "/api/books/", function( data ) {
 									books = data;
 									for (var i=0; i<data.length; i++) {
 										options_books += '<option value="'+data[i].Book_ref+'">'+data[i].Book_title+'</option>';
 									}
-									// Set default formats for first book
-									var formats = books[0].Book_formats.split(', ');
-									for (var i = 0; i<formats.length; i++) {
-										options_formats_default += '<option value="'+formats[i]+'">'+formats[i]+'</option>';
-									}
-									//Set the first line correctly
-									$('[name="name_1"]').empty().append(options_books)
-									$('[name="format_1"]').empty().append(options_formats_default);
-									$('[id="price_1"]').empty().append("£"+books[0].Book_price);
+									books.sort();
+									callback();
 								}).fail(function (jqxhr, status, error) {
 									console.log('error', status, error)
 								});
@@ -199,39 +222,7 @@
 						}
 					}
 
-					function generateBasket() {
-						// get all the current elements
-						var elems = $('[name^="name"]');
-
-						var IDlist = [];
-						// set the price and format on all items
-						for (var i = 0; i<elems.length; i++) {
-							IDlist.push(elems[i].value);
-							setBookPrice(elems[i].name);
-							setBookFormat(elems[i].name);
-						}
-
-						var sorted_arr = IDlist.slice().sort();
-						var results = [];
-						for (var i = 0; i < sorted_arr.length - 1; i++) {
-								if (sorted_arr[i + 1].name == sorted_arr[i].name) {
-										results.push(sorted_arr[i]);
-								}
-						}
-						console.log(results);
-
-						<!--// Set the price to 0.00 on all duplicated items-->
-						<!--for (var i = 0; i<elems.length; i++) {-->
-							<!--var i = 1;-->
-							<!--while (i<elems.length) {-->
-										<!--if (i === -1) {-->
-											<!--return 1;-->
-										<!--}-->
-										<!--i = basket.indexOf(bookID,i);-->
-										<!--count += 1;-->
-							<!--}-->
-						<!--}-->
-
+					function setTotal() {
 						// set the total on the page
 						elems = $('[id^="price"]');
 						var total = 0;
@@ -239,6 +230,19 @@
 							total += parseFloat(elems[i].innerHTML.split("£")[1]);
 						}
 						$('#total').empty().append("£"+total.toString());
+					}
+
+					function cleanBookSelections() {
+						// Get all current selections
+						var elems = $('[name^="name"]');
+						for (var i = 0; i<elems.length; i++) {
+
+						}
+						for (var i = 0; i<elems.length; i++) {
+							// for each book set options_books disabled
+							// except if its the row with the book
+							var custom_options_books = "";
+						}
 					}
 					</script>
 
